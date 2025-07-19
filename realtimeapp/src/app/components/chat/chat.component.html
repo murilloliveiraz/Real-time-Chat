@@ -1,0 +1,45 @@
+<div class="chat-container">
+  <div class="header">
+    <h2>Welcome, {{ currentUser?.username }}!</h2>
+    <button (click)="authService.logout()">Logout</button>
+  </div>
+
+  <div class="main-content">
+    <div class="user-list">
+      <h3>Online Users</h3>
+      <ul>
+        <li *ngFor="let user of onlineUsers"
+            [class.active]="user.userId === selectedUser?.userId"
+            (click)="selectUser(user)">
+          {{ user.username }} {{ user.userId === currentUser?.userId ? '(You)' : '' }}
+        </li>
+      </ul>
+    </div>
+
+    <div class="chat-window">
+      <ng-container *ngIf="selectedUser">
+        <h3>Chat with {{ selectedUser.username }}</h3>
+        <div class="messages">
+          <div *ngFor="let msg of getMessagesForChat(selectedUser.userId)"
+               [class.my-message]="msg.senderId === currentUser?.userId"
+               [class.other-message]="msg.senderId !== currentUser?.userId">
+            <div class="message-bubble">
+              <strong>{{ msg.senderUsername }}:</strong>
+              <p>{{ msg.content }}</p>
+              <small>{{ msg.timestamp | date:'shortTime' }}</small>
+            </div>
+          </div>
+        </div>
+        <div class="input-area">
+          <input [(ngModel)]="messageInput" placeholder="Type your message..." (keyup.enter)="sendMessage()" />
+          <button (click)="sendMessage()">Send</button>
+        </div>
+      </ng-container>
+      <p *ngIf="!selectedUser" class="no-chat-selected">Select a user to start chatting.</p>
+    </div>
+  </div>
+
+  <div class="system-messages">
+    <p *ngFor="let msg of systemMessages">{{ msg }}</p>
+  </div>
+</div>

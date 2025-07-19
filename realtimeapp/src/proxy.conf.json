@@ -1,0 +1,8 @@
+{
+  "/datahub": {
+    "target": "http://localhost:5053",
+    "secure": false,
+    "ws": true,
+    "logLevel": "debug"
+  }
+}
